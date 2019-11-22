@@ -2,12 +2,8 @@
 using SpotifyAPI.Web.Auth;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SpotifyAPI.Web.Enums;
@@ -45,6 +41,9 @@ namespace PlaylistToSpotify
 
         private async void btnUpload_Click(object sender, EventArgs e)
         {
+            _failedTofindSongs = new List<MusicItem>();
+            _completelyFailedTofindSongs = new List<MusicItem>();
+
             var auth = new ImplicitGrantAuth(
                 _clientId,
                 "http://localhost:4002",
@@ -71,7 +70,7 @@ namespace PlaylistToSpotify
 
                 List<MusicItem> musicItems = new List<MusicItem>();
 
-                while ((line = file.ReadLine()) != null)
+                while ((line = file.ReadLine()) != null && !String.IsNullOrWhiteSpace(line))
                 {
                     //line example: D:\Users\Paul\Music\Paul Music\Plus44\When Your Heart Stops Beating\12-plus_44-chapter_xiii.mp3
                     string[] artistPlusSong = null;
